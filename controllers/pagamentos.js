@@ -5,6 +5,48 @@ module.exports = function(app){
         res.send('ok2')
     })
 
+    app.delete('/pagamentos/pagamento/:id', function(req, res){
+        var pagamento = {};
+        var id = req.params.id;
+
+        pagamento.id = id;
+        pagamento.status = 'CANCELADO';
+
+        var connection = app.persistencia.connectionFactory();
+        var pagamentoDao = new app.persistencia.PagamentoDao(connection);
+
+        pagamentoDao.atualiza(pagamento, function (erro) {
+            if (erro){
+                res.status(500).send(erro);
+                return;
+            }
+            console.log('pagamento cancelado');
+            res.send(204).send(pagamento);
+        });
+    })
+
+    app.put('/pagamentos/pagamento/:id', function(req, res){
+
+        var pagamento = {};
+        var id = req.params.id;
+
+        pagamento.id = id;
+        pagamento.status = 'CON';
+
+        var connection = app.persistencia.connectionFactory();
+        var pagamentoDao = new app.persistencia.PagamentoDao(connection);
+
+        pagamentoDao.atualiza(pagamento, function (erro) {
+            if (erro){
+                res.status(500).send(erro);
+                return;
+            }
+            console.log('pagamento criado');
+            res.send(pagamento);
+        });
+    });
+
+
     app.post('/pagamentos/pagamento', function (req, res) {
 
         req.assert("forma_de_pagamento",
@@ -37,6 +79,7 @@ module.exports = function(app){
             }else{
                 console.log('pagamento criado')
                 res.location('/pagamentos/pagamento/' + resultado.insertId)
+                console.log(res)
                 res.status(201).json(pagamento)
             }
         })

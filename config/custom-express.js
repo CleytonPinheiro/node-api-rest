@@ -12,8 +12,6 @@ module.exports = function(){
 
     app.use(expressValidacao());
 
-
-
     consign()
         .include('controllers')
         .then('persistencia')
