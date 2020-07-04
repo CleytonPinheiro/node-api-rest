@@ -6,7 +6,7 @@ PagamentoDao.prototype.salva = function (pagamento, callback) {
 }
 
 PagamentoDao.prototype.atualiza = function (pagamento, callback) {
-    this._connection.query('UPDATE pagamentos SET status = ? where id =?',
+    this._connection.query('UPDATE pagamentos SET status = ? where id = ?',
         [pagamento.status, pagamento.id], callback);
 }
 

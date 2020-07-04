@@ -70,17 +70,33 @@ module.exports = function(app){
 
         var connection = app.persistencia.connectionFactory();
         var pagamentoDao = new app.persistencia.PagamentoDao(connection);
-        //console.log(pagamentoDao)
 
         pagamentoDao.salva(pagamento, function (erro, resultado) {
             if(erro){
                 console.log('Erro ao inserir no db')
                 res.status(500).send(erro)
             }else{
+                pagamento.id = resultado.insertId
                 console.log('pagamento criado')
-                res.location('/pagamentos/pagamento/' + resultado.insertId)
-                console.log(res)
-                res.status(201).json(pagamento)
+                res.location('/pagamentos/pagamento/' + pagamento.id)
+
+                var response= {
+                    dados_do_pagamento: pagamento,
+                    links:[
+                        {
+                            href:"http://localhost:3000/pagamentos/pagamento/" + pagamento.id,
+                            rel:"confirmar",
+                            method:"PUT"
+                        },
+                        {
+                            href:"http://localhost:3000/pagamentos/pagamento/" + pagamento.id,
+                            rel:"cancelar",
+                            method:"DELETE"
+                        },
+                    ]
+                }
+
+                res.status(201).json(response)
             }
         })
     })
