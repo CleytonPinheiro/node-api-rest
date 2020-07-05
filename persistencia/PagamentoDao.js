@@ -10,14 +10,14 @@ PagamentoDao.prototype.atualiza = function (pagamento, callback) {
         [pagamento.status, pagamento.id], callback);
 }
 
-PagamentoDao.prototype.lista = function (pagamento, callback) {
-    this._connection.query('SELECT * FROM pagamentos', callback);
+PagamentoDao.prototype.lista = function(callback) {
+    this._connection.query('select * from pagamentos',callback);
 }
 
-PagamentoDao.prototype.buscaPorId = function (pagamento, callback) {
-    this._connection.query('SELECT * FROM PAGAMENTOS WHERE ID = {id}', callback);
+PagamentoDao.prototype.buscaPorId = function (id,callback) {
+    this._connection.query("select * from pagamentos where id = ?",[id],callback);
 }
 
-module.exports = function () {
+module.exports = function(){
     return PagamentoDao;
 };
